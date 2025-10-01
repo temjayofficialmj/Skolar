@@ -1,0 +1,28 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+	<link rel="stylesheet" href="{% static  'css/style.css' %}">
+
+	<link href="{% static 'fonts/css/fontawesome.min.css' %}" rel="stylesheet" >
+	<link href="{% static 'fonts/css/brands.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'fonts/css/solid.min.css' %}" rel="stylesheet" />
+	<!--<script src="https://kit.fontawesome.com/4edc438ea9.js" crossorigin="anonymous"></script>-->
+	<title>SKOLAR</title>
+</head>
+<body class="bg-dark text-white">
+ <div>
+ 	{% block content %}
+ 		
+	{% endblock %}
+ </div>          
+	
+
+	<script src="{% static 'js/bootstrap.min.js' %}"></script>
+	<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

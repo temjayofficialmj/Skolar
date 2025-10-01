@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Search{% endblock title %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+{% include 'navbar.html' %}
+<div class="main-content">
+	<div class="container">
+		<div class="row mt-5">
+			<div class="col-md-5 col-sm-6">
+				<a class="btn btn-light" href="{% url 'postlist' %}"><i class="fa fa-circle-left"></i></a>
+			</div>
+		</div>
+		{% for profile in profile_list %}
+		<div class="row justify-content-center mt-3">
+			<div class="col-md-5 col-sm-12 border-bottom border-black position-relative">
+				<div>
+					<a href="{% url 'profileview' profile.pk %}">
+						<img class="rounded-circle post-img" height="30" width="30" src="{{ profile.picture.url }}" />
+					</a>
+					<p class="post-text">
+						<a class="post-link text-primary" href="{% url 'profileview' profile.pk %}">@{{ profile.user }} </a>
+					</p>
+				</div>
+				{% if profile.location %}
+				<p>{{ profile.location }}</p>
+				{% endif %}
+				<p><strong>Followers: </strong>{{ profile.followers.count }}
+					{% if user == request.user %}
+					{% else %}
+					{% if is_following %}
+					<form method="POST" action="{% url 'remove-follower' profile.pk %}">
+						{% csrf_token %}
+						<button class="btn btn-outline-danger" type="submit">Unfollow</button>
+					</form>
+					{% else %}
+					<form method="POST" action="{% url 'add-follower' profile.pk %}">
+						{% csrf_token %}
+						<button class="btn btn-outline-success" type="submit">Follow</button>
+					</form>
+					{% endif %}
+					{% endif %}
+				</p>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+</div>
+{% endblock %}

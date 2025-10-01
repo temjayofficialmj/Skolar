@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}Post Detail{% endblock title %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+	{% include 'navbar.html' %}
+<div class="main-content">
+	<div class="container">
+		<div class="row mt-5">
+			<div class="col-md-5 col-sm-6">
+				<a class="btn btn-dark shadow-md" href="{% url 'postlist' %}"><i class="fa fa-circle-left"></i></a>
+			</div>
+		</div>
+
+		<div class="row justify-content-center mt-3">
+			<div class="col-md-6 col-sm-12 border-bottom border-black">
+				<p>
+					<div>
+						<a href="{% url 'profileview' post.author.profile.pk %}">
+							<img class="rounded-circle post-img" height="30" width="30" src="{{ post.author.profile.picture.url }}" />
+						</a>
+						<p class="post-text">
+							<a class="post-link text-primary" href="{% url 'profileview' post.author.profile.pk %}">@{{ post.author }} </a><small>{{ post.created_on }}</small>
+							{% if request.user == post.author %}
+							<a href="{% url 'postupdate' post.author.profile.pk post.pk %}" class="btn btn-dark"><i class="fa fa-edit"></i></a>
+							<a href="{% url 'postdelete' post.author.profile.pk post.pk %}" class="btn text-danger  btn-dark"><i class="fa fa-trash"></i></a>
+							{% endif %}
+						</p>
+					</div>	
+				</p>
+				<div>
+					{% if post.image %} 
+						<img src="{{ post.image.url }}" class="img-fluid post-image" />
+					{% endif %}
+					{% if post.video %}	
+						<video class="img-fluid post-image" controls="controls" >
+							<source src="{{ post.video.url }}" type="video/mp4" />
+						</video>
+					{% endif %}
+					<p>{{ post.body }}</p>
+				</div>
+				
+				<div class="d-flex flex-row">
+					<form method="POST" action="{% url 'like' post.pk %}">
+						{% csrf_token %}
+						<input type="hidden" name="next" value="{{ request.path }}">
+						<button class="remove-default-btn text-white" type="submit"><i class="fa fa-thumbs-up"></i> <span>{{ post.likes.all.count }}</span></button>
+					</form>
+					<form method="POST" action="{% url 'dislike' post.pk %}">
+						{% csrf_token %}
+						<input type="hidden" name="next" value="{{ request.path }}">
+						<button class="remove-default-btn text-white" type="submit"><i class="fa fa-thumbs-down"></i> <span>{{ post.dislikes.all.count }}</span></button>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="row justify-content-center mt-3">
+			<div class="col-md-5 col-sm-12">
+				<form method="POST">
+					{% csrf_token %}
+					{{ form | crispy }}
+					<div class="d-grid gap-2 mb-5">
+						<button class="btn btn-success">Submit!</button>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		{% for comment in comments %}
+		<div class="row justify-content-center mt-3">
+			<div class="col-md-5 col-sm-12 border-bottom border-black">
+				<p>
+					<div>
+						<a href="{% url 'profileview' comment.author.profile.pk %}">
+						<img class="rounded-circle post-img" height="30" width="30" src="{{ comment.author.profile.picture.url }}" />
+						</a>
+						<p class="post-text">
+							<a class="post-link text-primary" href="{% url 'profileview' comment.author.profile.pk %}">@{{ comment.author }} </a><small>{{ comment.created_on }}</small>
+							{% if request.user == comment.author %}
+							<a href="{% url 'commentdelete' post.pk comment.pk %}" class="btn btn-dark"><i class="fa fa-trash"></i></a>
+							{% endif %}
+						</p>
+					</div> 
+				<p>{{ comment.comment }}</p>
+			</div>
+		</div>
+		{% endfor %}
+	</div>	
+</div>
+{% endblock %}

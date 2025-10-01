@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+     <!--Bottom navbar-->
+     <div class="container d-block d-md-none">
+         <nav class="navbar fixed-bottom navbar-expand navbar-dark bg-dark rounded">
+        <div class="container-xxl">
+            <!--toggle button for cellphones-->
+           <!--  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main" aria-controls="main" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button> -->
+                <!--navbar links-->
+            <div class="collapse navbar-collapse justify-content-between align-center" id="main">
+                <ul class="navbar-nav col justify-content-center">
+                    <li class="nav-item ms-2 me-2">
+                        <a class="nav-link fw-bold" href="{% url 'postlist' %}" ><i class="fa fa-home"></i><small> Home</small></a>
+                    </li>
+                    <li class="nav-item ms-2 me-2">
+                        <a class="nav-link" href="{% url  'postcreate' %}" ><i class="fa fa-add"></i> <small>Create</small></a>
+                    </li>
+                    <li class="nav-item ms-2 me-2">
+                        <a href="#sidebar" class="nav-link d-block post-link" data-bs-toggle="offcanvas" role="button" aria-controls="sidebar"><i class="fa fa-search"></i> <small>Seek</small></a>
+                    </li>
+                    <li class="nav-item ms-2 me-2">
+                        <a class="nav-link" href="{% url 'lead' %}" ><i class="fa fa-ranking-star"></i> <small>Leaderboard</small></a>
+                    </li>
+                    <li class="nav-item ms-2 me-2">
+                        <a class="nav-link" href="{% url 'profileview' user.profile.pk %}" ><i class="fa fa-user"></i> <small>Profile</small></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>     
+    </div>
+    <div class="d-flex d-none d-md-block">
+        <div class="sidenav">
+            <a href="{% url 'postlist' %}" class="navbar-brand">
+                <span class="fw-bold text-secondary"><strong> SKOLAR  </strong> </span>
+            </a>
+            <div class="mt-5 link-text">
+                <a href="{% url 'postlist' %}" class="fw-bold lead mt-3"><i class="fa fa-home"></i>  Home</a>
+                <a href="{% url  'postcreate' %}" class="mt-2"><i class="fa fa-add"></i> Create</a>
+                <a href="#sidebar" class="d-bloc k mt-2" data-bs-toggle="offcanvas" role="button" aria-controls="sidebar"><i class="fa fa-search"></i> Seek</a>
+                <a href="{% url 'lead' %}" class="mt-2"><i class="fa fa-ranking-star"></i> LeaderBoard</a>
+                <a href="{% url 'profileview' user.profile.pk %}" class="mt-2"><i class="fa fa-user"></i> Profile</a>
+            </div>     
+        </div>
+    </div>
+
+    <div>
+        <!-- offcanvas -->
+        <div class="bg-dark offcanvas offcanvas-top" tabindex="-1" id="sidebar" aria-labelledby="sidebar-label">
+            <div class=" container">
+                <div class="row justify-content-end align-center" >
+                    <div class="col-md-5 mt-5">
+                        <form row="search" class="d-flex" method="GET" action="{% url 'profile-search' %}">
+                            <input type="text" class="form-control me-2" placeholder="search" aria-label="Search" name="query" value="{{ request.GET.query }}">
+                            <button class="btn btn-outline-success remove-default-btn" type="submit"><i class="fa fa-search"></i></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div>
+
+{% endblock content %}

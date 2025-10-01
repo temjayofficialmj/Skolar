@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	<div class="container">
+		<div class="row justify-content-center mt-5">
+			<div class="col-md-10 col-sm-12 text-center">
+				<h1>CONNECT WITH PEOPLE</h1>
+				<p class="lead mt-3">Discover wat u like, follow and stay upto date!!</p>
+				<div class="d-flex justify-content-center mt-5">
+					<a href="{% url 'login' %}" class="btn btn-light mr-2">LOGIN</a>
+					<a href="{% url 'signup' %}" class="btn btn-dark">REGISTER</a>
+				</div>
+			</div>
+		</div>
+	</div>	
+{% endblock %}
