@@ -13,11 +13,11 @@
 			</div>
 
 			<div class="bg-black d-block d-md-none">
-				<div class="row justify-content-start">
-					<div class="col-3">
+				<div class="row justify-content-between">
+					<div class="col-2">
 						<img src="{{ profile.picture.url }}" class="rounded-circle border border-dark" height="125" width="125" />
 					</div>
-					<div class="col">
+					<div class="col-9 ps-4">
 						<div class="row pt-3">
 							{% if profile.name %}
 							<div class="col">
@@ -72,6 +72,23 @@
 				</div>
 				
 				<div class="row justify-content-start">
+					
+					{% if user == request.user %}
+
+					<div class="col-12">
+						{% if profile.bio %}
+						<strong>Bio:</strong>
+						<div class="border-top border-start border-end border-dark rounded">
+							<p class="p-2"> {{ profile.bio }}</p>
+						</div>
+						{% else %}
+						<div class="border-top border-start border-end border-dark rounded">
+							<p class="text-secondary lead">Your Bio Goes Here!!</p>
+						{% endif %}
+					</div>
+
+					{%  else %}
+
 					<div class="col-3">
 						{% if user == request.user %}
 						{% else %}
@@ -98,8 +115,10 @@
 						<div class="border-top border-start border-end border-dark rounded">
 							<p class="text-secondary lead">Your Bio Goes Here!!</p>
 						</div>
+
 						{% endif %}
 					</div>
+					{% endif %}
 				</div>
 			</div>
 
