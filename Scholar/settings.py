@@ -46,6 +46,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 MIDDLEWARE = [
@@ -154,3 +157,11 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 ACCOUNT_EMAIL_REQUIRED =True
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dnqbmmtkf',
+    'API_KEY': '247742113713348',
+    'API_SECRET': 'DxkFB6bSeQXA2lteYQhio4e9jZc',
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
