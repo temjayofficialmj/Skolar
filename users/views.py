@@ -1,12 +1,16 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, CreateView
 from .forms import CustomUserCreation
 from .models import CustomUser
+from django.views import View
 
 # Create your views here.
-class Homepage(TemplateView):
-	template_name = 'home.html'
+class Homepage(View):
+	def get(self, request, *args, **kwargs):
+		if request.user.is_authenticated:
+			return redirect('postlist')  # logged-in users skip homepage
+		return render(request, 'home.html')  # guests see landing page
 
 class SignUp(CreateView):
 	form_class = CustomUserCreation
