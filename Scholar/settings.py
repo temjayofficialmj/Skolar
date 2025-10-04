@@ -159,9 +159,9 @@ ACCOUNT_EMAIL_REQUIRED =True
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME':  os.environ.get('dnqbmmtkf'),
-    'API_KEY':  os.environ.get('247742113713348'),
-    'API_SECRET':  os.environ.get('DxkFB6bSeQXA2lteYQhio4e9jZc'),
+     'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
 }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
