@@ -16,7 +16,7 @@
 								<li>
 									<div class="mt-3">
 										<a href="{% url 'profileview' item.user.profile.pk %}">
-											<img class="rounded-circle post-img" height="30" width="30" src="{{ item.user.profile.picture.url }}" alt="Profile pic" />
+											<img class="rounded-circle border border-blue post-img" height="30" width="30" src="{{ item.user.profile.picture.url }}" alt="Profile pic" />
 										</a>
 										<p class="post-text">
 											<a class="post-link text-primary" href="{% url 'profileview' item.user.profile.pk %}">{{ item.user.username }}</a> - <span class="badge bg-primary rounded-pill"> {{ item.score }}pts</span>

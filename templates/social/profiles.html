@@ -5,14 +5,105 @@
 {% block content %}
 	{% include 'navbar.html' %}
 	<div class="main-content">
-		<div class="container">
+		<div class="container mb-5">
 			<div class="row bg-black">
 				<div class="col-md-3 col-sm-6">
 					<a href="{% url 'postlist' %}" class="btn btn-dark shadow-lg"><i class="fa fa-circle-left"></i></a>
 				</div>
 			</div>
 
-			<div class="row bg-black justify-content-center">
+			<div class="bg-black d-block d-md-none">
+				<div class="row justify-content-start">
+					<div class="col-3">
+						<img src="{{ profile.picture.url }}" class="rounded-circle border border-dark" height="125" width="125" />
+					</div>
+					<div class="col">
+						<div class="row pt-3">
+							{% if profile.name %}
+							<div class="col">
+								<h3 class="">{{ profile.name }} </h3>
+								
+							</div>
+							<div class="col-3">
+								{% if request.user == user %}
+								<small><a href="{% url 'profile-edit' profile.pk %}" class="edit-color"><i class="fa fa-edit"></i></a></small>
+								{% endif %}
+							</div>
+							{% else %}
+							<div class="col">
+								<h3 class="">
+								{{ user.username }}
+								</h3>
+								{% if profile.birth_date %}
+								<p>{{ profile.birth_date }}</p>
+								{% else %}
+								<p class="text-secondary lead">BirthDate</p>
+								{% endif %}
+
+								<p>
+									<strong>Followers: </strong>
+									{{ number_of_followers }}
+								</p>
+							</div>
+							{% if request.user == user %}
+							<div class="col-3">
+								<div class="dropdown">
+									<a class="nav-link dropdown-toggle text-white " data-bs-toggle="dropdown" role="buton" id="user-dropdown" aria-expanded="false">
+                    					<i class="fa fa-user"></i>
+                    				</a>
+                    				<ul class="dropdown-menu" aria-labelledby="user-dropdown">
+                        				<li><a class="dropdown-item" href="{% url 'profile-edit' profile.pk %}"><i class="fa fa-edit"></i>EDIT</a></li>
+                        				<!--<li>
+                        					<a class="btn remove-default-btn text-primary" href="{% url 'password_change' %}"></a>
+                        				</li>-->
+                        				<li>
+                           					<form action="{% url 'logout' %}" method="post">
+                                				{% csrf_token %}
+                                				<button type="submit" class="remove-default-btn"><i class="fa fa-user-alt"></i>Log Out</button>
+                            				</form>
+                        				</li>
+                    				</ul>
+                				</div>
+							</div>
+							{% endif %}
+							{% endif %}
+						</div>
+					</div>
+				</div>
+				
+				<div class="row justify-content-start">
+					<div class="col-3">
+						{% if user == request.user %}
+						{% else %}
+						{% if is_following %}
+						<form method="POST" action="{% url 'remove-follower' profile.pk %}">
+							{% csrf_token %}
+							<small><button class="btn rounded-sm rounded btn-outline-danger" type="submit">Unfollow</button></small>
+						</form>
+						{% else %}
+						<form method="POST" action="{% url 'add-follower' profile.pk %}">
+							{% csrf_token %}
+							<small><button class="btn rounded-sm rounded btn-outline-success" type="submit">Follow</button></small>
+						</form>
+						{% endif %}
+						{% endif %}
+					</div>
+					<div class="col-9">
+						{% if profile.bio %}
+						<strong>Bio:</strong>
+						<div class="border-top border-start border-end border-dark rounded">
+							<p class="p-2"> {{ profile.bio }}</p>
+						</div>
+						{% else %}
+						<div class="border-top border-start border-end border-dark rounded">
+							<p class="text-secondary lead">Your Bio Goes Here!!</p>
+						</div>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+
+			<div class="row bg-black d-none d-md-block justify-content-center">
 				<div class="card bg-black shadow-sm col-md-12 col-sm-12 px-5 pt-3 text-white">
 					<div class="row">
 						<div class="col-md-2 col-sm-3">
@@ -102,7 +193,7 @@
 					{% endif %}
 
 					<div class="row justify-content-start">
-						<div class="col-md-6 col-sm-12">
+						<div class="col-md-6">
 							{% if profile.bio %}
 							<strong>Bio:</strong>
 							<div  class="border border-dark rounded">
@@ -124,7 +215,7 @@
 				</div>
 			</div>
 			{% for post in posts %}
-			<div class="row justify-content-center text-white mb-5">
+			<div class="row justify-content-center text-white">
 				<div class="col-md-6 col-sm-12 card rounded border-bottom border-dark bg-black">
 					<div class="card-header text-secondary">
 						<a href="{% url 'profileview' post.author.profile.pk %}">
