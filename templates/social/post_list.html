@@ -6,26 +6,25 @@
 
 {% block content %}
 {% include 'navbar.html' %}
-	<div class="main-content">
-		<div class="container mb-3 d-md-none d-block">
-        	<nav class="navbar  navbar-md-fixed-bottom navbar-expand">
-        		<div class="container">
-        			<a href="{% url 'postlist' %}" class="navbar-brand">
-                		<span class="fw-bold text-secondary"><strong> SKOLAR  </strong> </span>
-            		</a>
-            	</div>
-            </nav>
-        </div>
+	<div class="container  d-md-none d-block">
+    	<nav class="navbar sticky-top navbar-expand">
+        	<div class="container">
+        		<a href="{% url 'postlist' %}" class="navbar-brand">
+            		<span class="fw-bold text-secondary"><strong> SKOLAR  </strong></span>
+            	</a>
+            </div>
+        </nav>
+    </div>
 
-		<div class="container mt-5">
+		<!-- POSTS -->
+	<div class="main-content ">
+		<div class="container mb-5 mt-2">
 			<div class="row justify-content-between">
-				<!-- <div class="col-md-3 d-md-block d-none">
-				</div> -->
 				<div class="col-md-9">
 					{% for post in post_list %}
 					<div class="row justify-content-center">
-						<div class="col-md-7 col-sm-12 border-bottom border-black ">
-							<div>
+						<div class="col-md-8 card bg-black col-sm-12 border-bottom border-dark">
+							<div class="card-header text-secondary">
 								<a href="{% url 'profileview' post.author.profile.pk %}">
 									<img class="rounded-circle post-img" height="30" width="30" src="{{ post.author.profile.picture.url }}" />
 								</a>
@@ -34,20 +33,24 @@
 								</p>
 							</div>
 							{% if post.video %}
-								<video class="img-fluid post-image" controls="controls" >
+								<video class="img-fluid card-img-top post-image" controls="controls" >
 									<source src="{{ post.video.url }}" type="video/mp4" />
 								</video>
 								{% endif %}
-							<div class="position-relative">
+							<div class=" card-body position-relative">
 								{% if post.image %}
-									<img src="{{ post.image.url }}" class="img-fluid post-image" />
+									<img src="{{ post.image.url }}" class="img-fluid card-img-top post-image" />
 								{% endif %}
 								
-								<p class="px-3 my-2"><strong class="text-secondary"></strong> {{ post.body }}</p>
+								<p class="my-2 text-white">
+									<a class="post-link text-primary" href="{% url 'profileview' post.author.profile.pk %}"><small class="text-secondary">@{{ post.author }}_:</small>
+									</a>
+									{{ post.body }}
+								</p>
 								<a href="{% url 'postdetail' post.pk %}" class="stretched-link"></a>
 							</div>
 
-							<div class="d-flex flex-row mb-1 mt-3 ">
+							<div class="d-flex flex-row card-footer mb-1 mt-3 ">
 								<form method="POST" action="{% url 'like' post.pk %}">
 									{% csrf_token %}
 									<input type="hidden" name="next" value="{{ request.path }}">
@@ -65,7 +68,9 @@
 					{% endfor %}
 				</div>
 					
-				<div  id="leaderboard" class="col-md-3 text-center d-none d-md-block ">
+					<!-- LEADERBOARD -->
+
+				<div  id="leaderboard" class="col-md-3 text-center d-none d-lg-block ">
 					<p class="mb-3"><strong>Top 10 SKOLAR Users</strong></p>
 					<div class="row justify-content-center">
 						<div class="col-10">

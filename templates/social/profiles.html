@@ -6,19 +6,38 @@
 	{% include 'navbar.html' %}
 	<div class="main-content">
 		<div class="container">
-			<div class="row mt-5">
+			<div class="row bg-black">
 				<div class="col-md-3 col-sm-6">
 					<a href="{% url 'postlist' %}" class="btn btn-dark shadow-lg"><i class="fa fa-circle-left"></i></a>
 				</div>
 			</div>
 
-			<div class="row justify-content-center">
-				<div class="card bg-dark shadow-sm col-md-8 col-sm-11 px-5 pt-3 text-white">
+			<div class="row bg-black justify-content-center">
+				<div class="card bg-black shadow-sm col-md-12 col-sm-12 px-5 pt-3 text-white">
 					<div class="row">
-						<div class="col-md-2 col-sm-3 me-3">
-							<img src="{{ profile.picture.url }}" class="rounded-circle" height="120" width="120" />
+						<div class="col-md-2 col-sm-3">
+							<img src="{{ profile.picture.url }}" class="rounded-circle border border-dark" height="100" width="100" />
+							<div class=" text-white">
+								<p>
+									{% if user == request.user %}
+									{% else %}
+									{% if is_following %}
+									<form method="POST" action="{% url 'remove-follower' profile.pk %}">
+										{% csrf_token %}
+										<small><button class="btn rounded-sm rounded btn-outline-danger" type="submit">Unfollow</button></small>
+									</form>
+									{% else %}
+									<form method="POST" action="{% url 'add-follower' profile.pk %}">
+									{% csrf_token %}
+										<small><button class="btn rounded-sm rounded btn-outline-success" type="submit">Follow</button></small>
+									</form>
+									{% endif %}
+									{% endif %}
+								</p>
+							</div>
 						</div>
-						<div class="col-md-7 col-sm-4 ms-3">
+
+						<div class="col-md-7 col-sm-4 ms-5 ">
 							{% if profile.name %}
 							<h3 class="pt-4">{{ profile.name }}
 								<span>
@@ -27,40 +46,32 @@
 									{% endif %}
 								</span>
 								{% else %}
-								<h3 class="pt-4">{{ user.username }}
-									<span class="d-md-none d-block">
+								<h3 class="pt-4">
+									{{ user.username }} 
+									<!-- <span class="d-md-none d-block"> -->
 										{% if request.user == user %}
-											<a href="{% url 'profile-edit' profile.pk %}" class=" text-primary edit-color post-link"><small><i class="fa fa-edit"></i>edit</small></a>
+											<small class="d-md-none d-block"><a href="{% url 'profile-edit' profile.pk %}" class=" text-secondary edit-color post-link"><small><i class="fa fa-edit"></i></small></a></small>
 										{% endif %}
-									</span>
+									<!-- </span> -->
 								</h3>
 								{% endif %}
 							</h3>
+
 							{% if profile.birth_date %}
 							<p>{{ profile.birth_date }}</p>
 							{% else %}
 							<p class="text-secondary lead">BirthDate</p>
 							{% endif %}
+
 							<div class=" text-white">
-								<p><strong>Followers: </strong>{{ number_of_followers }}
-									{% if user == request.user %}
-									{% else %}
-									{% if is_following %}
-									<form method="POST" action="{% url 'remove-follower' profile.pk %}">
-										{% csrf_token %}
-										<small><button class="btn rounded-pill btn-outline-danger" type="submit">Unfollow</button></small>
-									</form>
-									{% else %}
-									<form method="POST" action="{% url 'add-follower' profile.pk %}">
-									{% csrf_token %}
-										<small><button class="btn rounded rounded-pill btn-outline-success" type="submit">Follow</button></small>
-									</form>
-									{% endif %}
-									{% endif %}
+								<p>
+									<strong>Followers: </strong>
+									{{ number_of_followers }}
 								</p>
 							</div>
 						</div>
-						<div class="col-md-1  col-sm-2 pt-4">
+
+						<div class="col-md-1  col-sm-1 pt-4">
 							{% if request.user == user %}
 								<div class="dropdown">
 									
@@ -82,7 +93,8 @@
                 				</div>
 							{% endif %}
 						</div>
-					</div>							
+					</div>
+
 					{% if profile.school %}
 					<p class="lead">Attends Skool at: <b>{{ profile.school }}</b></p>
 					{% else %}
@@ -90,10 +102,10 @@
 					{% endif %}
 
 					<div class="row justify-content-start">
-						<div class="col-6">
+						<div class="col-md-6 col-sm-12">
 							{% if profile.bio %}
-							<p class="strong">Bio: </p>
-							<div  class="border-top border-start">
+							<strong>Bio:</strong>
+							<div  class="border border-dark rounded">
 								<p class="p-2"> {{ profile.bio }}</p>
 							</div>
 							{% else %}
@@ -104,10 +116,17 @@
 				</div>
 			</div>
 
+				<!-- POSTS -->
+
+			<div class="row bg-black rounded justify-content-center mt-1 mb-1 text-white">
+				<div class="col-1">
+					POSTS
+				</div>
+			</div>
 			{% for post in posts %}
-			<div class="row justify-content-center mt-5 text-white">
-				<div class="col-md-6 col-sm-12 border-bottom shadow-md border-black">
-					<div>
+			<div class="row justify-content-center text-white mb-5">
+				<div class="col-md-6 col-sm-12 card rounded border-bottom border-dark bg-black">
+					<div class="card-header text-secondary">
 						<a href="{% url 'profileview' post.author.profile.pk %}">
 							<img class="rounded-circle post-img" height="30" width="30" src="{{ post.author.profile.picture.url }}" />
 						</a>
@@ -116,18 +135,20 @@
 						</p> 
 					</div>
 					{% if post.video %}
-						<video class="img-fluid post-image" loop controls="controls" >
+						<video class="img-fluid card-img-top post-image" loop controls="controls" >
 							<source src="{{ post.video.url }}" type="video/mp4" />
 						</video>
 					{% endif %}
 					<div class="position-relative">
 						{% if post.image %} 
-							<img src="{{ post.image.url }}" class="img-fluid post-image" />
+							<img src="{{ post.image.url }}" class="img-fluid card-img-top post-image" />
 						{% endif %}
-						<p>{{ post.body }}</p>
+						<p class="text-white">
+							<a class="post-link text-primary" href="{% url 'profileview' post.author.profile.pk %}"><small class="text-secondary">@{{ post.author }}_:</small></a>
+							{{ post.body }}</p>
 						<a href="{% url 'postdetail' post.pk %}" class="stretched-link"></a>
 					</div>
-					<div class="d-flex flex-row">
+					<div class="d-flex card-footer flex-row">
 						<form method="POST" action="{% url 'like' post.pk %}">
 							{% csrf_token %}
 							<input type="hidden" name="next" value="{{ request.path }}">

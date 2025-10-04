@@ -3,37 +3,35 @@
 {% block content %}
      <!--Bottom navbar-->
      <div class="container d-block d-md-none">
-         <nav class="navbar fixed-bottom navbar-expand navbar-dark bg-dark rounded">
+         <nav class="navbar bg-black fixed-bottom border-top border-dark navbar-expand navbar-dark bg-dark rounded">
         <div class="container-xxl">
-            <!--toggle button for cellphones-->
-           <!--  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main" aria-controls="main" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button> -->
-                <!--navbar links-->
             <div class="collapse navbar-collapse justify-content-between align-center" id="main">
                 <ul class="navbar-nav col justify-content-center">
-                    <li class="nav-item ms-2 me-2">
-                        <a class="nav-link fw-bold" href="{% url 'postlist' %}" ><i class="fa fa-home"></i><small> Home</small></a>
+                    <li class="nav-item me-5">
+                        <a class="nav-link fw-bold" href="{% url 'postlist' %}" ><i class="fa fa-home"></i><small></small></a>
                     </li>
-                    <li class="nav-item ms-2 me-2">
-                        <a class="nav-link" href="{% url  'postcreate' %}" ><i class="fa fa-add"></i> <small>Create</small></a>
+                    <li class="nav-item me-5">
+                        <a class="nav-link" href="{% url  'postcreate' %}" ><i class="fa fa-add"></i> <small></small></a>
                     </li>
-                    <li class="nav-item ms-2 me-2">
-                        <a href="#sidebar" class="nav-link d-block post-link" data-bs-toggle="offcanvas" role="button" aria-controls="sidebar"><i class="fa fa-search"></i> <small>Seek</small></a>
+                    <li class="nav-item me-5">
+                        <a href="#sidebar" class="nav-link d-block post-link" data-bs-toggle="offcanvas" role="button" aria-controls="sidebar"><i class="fa fa-search"></i> <small></small></a>
                     </li>
-                    <li class="nav-item ms-2 me-2">
-                        <a class="nav-link" href="{% url 'lead' %}" ><i class="fa fa-ranking-star"></i> <small>Leaderboard</small></a>
+                    <li class="nav-item me-5">
+                        <a class="nav-link" href="{% url 'lead' %}" ><i class="fa fa-ranking-star"></i> <small></small></a>
                     </li>
-                    <li class="nav-item ms-2 me-2">
-                        <a class="nav-link" href="{% url 'profileview' user.profile.pk %}" ><i class="fa fa-user"></i> <small>Profile</small></a>
+                    <li class="nav-item me-5">
+                        <a class="nav-link" href="{% url 'profileview' user.profile.pk %}" ><i class="fa fa-user"></i> <small></small></a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>     
     </div>
+
+    <!-- SIDENAV -->
+
     <div class="d-flex d-none d-md-block">
-        <div class="sidenav">
+        <div class="sidenav border-end border-black">
             <a href="{% url 'postlist' %}" class="navbar-brand">
                 <span class="fw-bold text-secondary"><strong> SKOLAR  </strong> </span>
             </a>

@@ -6,7 +6,7 @@
 
 {% block content %}
 	{% include 'navbar.html' %}
-<div class="main-content">
+<div class="main-content ">
 	<div class="container">
 		<div class="row mt-5">
 			<div class="col-md-5 col-sm-6">
@@ -14,10 +14,10 @@
 			</div>
 		</div>
 
-		<div class="row justify-content-center mt-3">
-			<div class="col-md-6 col-sm-12 border-bottom border-black">
+		<div class="row justify-content-center mt-3 ">
+			<div class="col-md-6 col-sm-12 border-black border-bottom">
 				<p>
-					<div>
+					<div class="">
 						<a href="{% url 'profileview' post.author.profile.pk %}">
 							<img class="rounded-circle post-img" height="30" width="30" src="{{ post.author.profile.picture.url }}" />
 						</a>
@@ -30,7 +30,7 @@
 						</p>
 					</div>	
 				</p>
-				<div>
+				<div class="">
 					{% if post.image %} 
 						<img src="{{ post.image.url }}" class="img-fluid post-image" />
 					{% endif %}
@@ -39,7 +39,11 @@
 							<source src="{{ post.video.url }}" type="video/mp4" />
 						</video>
 					{% endif %}
-					<p>{{ post.body }}</p>
+					<p>
+						<a class="post-link text-primary" href="{% url 'profileview' post.author.profile.pk %}"><small class="text-secondary">@{{ post.author }}_:</small>
+						</a>
+						{{ post.body }}
+					</p>
 				</div>
 				
 				<div class="d-flex flex-row">
@@ -56,7 +60,10 @@
 				</div>
 			</div>
 		</div>
-		<div class="row justify-content-center mt-3">
+
+			<!-- Comment_Form -->
+
+		<div class="row justify-content-center mt-5">
 			<div class="col-md-5 col-sm-12">
 				<form method="POST">
 					{% csrf_token %}
@@ -67,6 +74,14 @@
 				</form>
 			</div>
 		</div>
+
+		<!-- COMMENTS -->
+
+		<div class="row rounded justify-content-center mt-1 mb-1 text-white">
+				<div class="col-1">
+					Comments
+				</div>
+		</div>		
 
 		{% for comment in comments %}
 		<div class="row justify-content-center mt-3">
