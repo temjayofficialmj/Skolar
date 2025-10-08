@@ -12,36 +12,52 @@
 				</div>
 			</div>
 
+			<!-- MOBILE VIEW -->
+
 			<div class="bg-black d-block d-md-none">
 				<div class="row justify-content-between">
-					<div class="col-2">
+					<div class="col-4">
 						<img src="{{ profile.picture.url }}" class="rounded-circle border border-dark" height="125" width="125" />
 					</div>
-					<div class="col-9 ps-4">
+					<div class="col-8">
 						<div class="row pt-3">
 							{% if profile.name %}
-							<div class="col">
-								<h3 class="">{{ profile.name }} </h3>
-								
+							<div class="col ps-3">
+								<h3 class="">{{ profile.name }} </h3>								
 							</div>
-							<div class="col-3">
 								{% if request.user == user %}
-								<small><a href="{% url 'profile-edit' profile.pk %}" class="edit-color"><i class="fa fa-edit"></i></a></small>
-								{% endif %}
+							<div class="col-3">
+								<div class="dropdown">
+									<a class="nav-link dropdown-toggle text-white " data-bs-toggle="dropdown" role="buton" id="user-dropdown" aria-expanded="false">
+                    					<i class="fa fa-user"></i>
+                    				</a>
+                    				<ul class="dropdown-menu" aria-labelledby="user-dropdown">
+                        				<li><a class="dropdown-item" href="{% url 'profile-edit' profile.pk %}"><i class="fa fa-edit"></i>EDIT</a></li>
+                        				<!--<li>
+                        					<a class="btn remove-default-btn text-primary" href="{% url 'password_change' %}"></a>
+                        				</li>-->
+                        				<li>
+                           					<form action="{% url 'logout' %}" method="post">
+                                				{% csrf_token %}
+                                				<button type="submit" class="remove-default-btn"><i class="fa fa-user-alt"></i>Log Out</button>
+                            				</form>
+                        				</li>
+                    				</ul>
+                				</div>
 							</div>
+								{% endif %}
+
 							{% else %}
-							<div class="col">
+							<div class="col ps-3">
 								<h3 class="">
 								{{ user.username }}
 								</h3>
 								{% if profile.birth_date %}
 								<p>{{ profile.birth_date }}</p>
-								{% else %}
-								<p class="text-secondary lead">BirthDate</p>
 								{% endif %}
 
 								<p>
-									<strong>Followers: </strong>
+									<strong><a class="post-link text-white" href="{% url 'followers_list' profile.pk %}">Followers: </a></strong>
 									{{ number_of_followers }}
 								</p>
 							</div>
@@ -82,8 +98,7 @@
 							<p class="p-2"> {{ profile.bio }}</p>
 						</div>
 						{% else %}
-						<div class="border-top border-start border-end border-dark rounded">
-							<p class="text-secondary lead">Your Bio Goes Here!!</p>
+						<div class="border-top border-start border-end border-dark rounded"></div>
 						{% endif %}
 					</div>
 
@@ -111,16 +126,13 @@
 						<div class="border-top border-start border-end border-dark rounded">
 							<p class="p-2"> {{ profile.bio }}</p>
 						</div>
-						{% else %}
-						<div class="border-top border-start border-end border-dark rounded">
-							<p class="text-secondary lead">Your Bio Goes Here!!</p>
-						</div>
-
 						{% endif %}
 					</div>
 					{% endif %}
 				</div>
 			</div>
+
+			<!-- LARGE SCREENS -->
 
 			<div class="row bg-black d-none d-md-block justify-content-center">
 				<div class="card bg-black shadow-sm col-md-12 col-sm-12 px-5 pt-3 text-white">
@@ -158,30 +170,26 @@
 								{% else %}
 								<h3 class="pt-4">
 									{{ user.username }} 
-									<!-- <span class="d-md-none d-block"> -->
 										{% if request.user == user %}
 											<small class="d-md-none d-block"><a href="{% url 'profile-edit' profile.pk %}" class=" text-secondary edit-color post-link"><small><i class="fa fa-edit"></i></small></a></small>
 										{% endif %}
-									<!-- </span> -->
 								</h3>
 								{% endif %}
 							</h3>
 
 							{% if profile.birth_date %}
 							<p>{{ profile.birth_date }}</p>
-							{% else %}
-							<p class="text-secondary lead">BirthDate</p>
 							{% endif %}
 
 							<div class=" text-white">
 								<p>
-									<strong>Followers: </strong>
+									<strong><a class="post-link text-white" href="{% url 'followers_list' profile.pk %}">Followers: </a></strong>
 									{{ number_of_followers }}
 								</p>
 							</div>
 						</div>
 
-						<div class="col-md-1  col-sm-1 pt-4">
+						<div class="col-md-1 pt-4">
 							{% if request.user == user %}
 								<div class="dropdown">
 									
@@ -207,8 +215,6 @@
 
 					{% if profile.school %}
 					<p class="lead">Attends Skool at: <b>{{ profile.school }}</b></p>
-					{% else %}
-					<p class="text-secondary lead">School</p>
 					{% endif %}
 
 					<div class="row justify-content-start">
@@ -218,8 +224,6 @@
 							<div  class="border border-dark rounded">
 								<p class="p-2"> {{ profile.bio }}</p>
 							</div>
-							{% else %}
-							<p class="text-secondary lead">Your Bio Goes Here!!</p>
 							{% endif %}
 						</div>
 					</div>	

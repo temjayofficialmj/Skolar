@@ -6,20 +6,23 @@
          <nav class="navbar bg-black fixed-bottom border-top border-dark navbar-expand navbar-dark bg-dark rounded">
         <div class="container-xxl">
             <div class="collapse navbar-collapse justify-content-between align-center" id="main">
-                <ul class="navbar-nav col justify-content-center">
-                    <li class="nav-item me-5">
+                <ul class="navbar-nav col justify-content-between">
+                    <li class="nav-item">
                         <a class="nav-link fw-bold" href="{% url 'postlist' %}" ><i class="fa fa-home"></i><small></small></a>
                     </li>
-                    <li class="nav-item me-5">
+                    <li class="nav-item">
                         <a class="nav-link" href="{% url  'postcreate' %}" ><i class="fa fa-add"></i> <small></small></a>
                     </li>
-                    <li class="nav-item me-5">
+                    <li class="nav-item">
                         <a href="#sidebar" class="nav-link d-block post-link" data-bs-toggle="offcanvas" role="button" aria-controls="sidebar"><i class="fa fa-search"></i> <small></small></a>
                     </li>
-                    <li class="nav-item me-5">
+                    <li class="nav-item">
                         <a class="nav-link" href="{% url 'lead' %}" ><i class="fa fa-ranking-star"></i> <small></small></a>
                     </li>
-                    <li class="nav-item me-5">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url  'explore' %}" ><i class="fa fa-search-plus"></i> <small></small></a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="{% url 'profileview' user.profile.pk %}" ><i class="fa fa-user"></i> <small></small></a>
                     </li>
                 </ul>
@@ -40,6 +43,7 @@
                 <a href="{% url  'postcreate' %}" class="mt-2"><i class="fa fa-add"></i> Create</a>
                 <a href="#sidebar" class="d-bloc k mt-2" data-bs-toggle="offcanvas" role="button" aria-controls="sidebar"><i class="fa fa-search"></i> Seek</a>
                 <a href="{% url 'lead' %}" class="mt-2"><i class="fa fa-ranking-star"></i> LeaderBoard</a>
+                <a class="mt-2 " href="{% url  'explore' %}" ><i class="fa fa-search-plus"></i> Explore</a>
                 <a href="{% url 'profileview' user.profile.pk %}" class="mt-2"><i class="fa fa-user"></i> Profile</a>
             </div>     
         </div>

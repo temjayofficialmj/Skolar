@@ -57,17 +57,6 @@ class PostList(LoginRequiredMixin,View):
 
         return render(request, 'social/post_list.html', context)
 
-# def PostCreate(request):
-#   if request.method == 'POST':
-#       form = PostForm(request.POST, request.FILES)
-#       if form.is_valid():
-#           form.save()
-#           return redirect('postlist')
-#   else:
-#       form = PostForm()
-
-#   return render(request, 'social/post_create.html', {'form' : form})
-
 class PostCreate(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         form = PostForm()
@@ -298,3 +287,24 @@ def leaderboard_view(request):
     top_users = WeeklyScore.objects.filter(week_start=week_start).select_related('user').order_by('-score')[:100]
 
     return render(request, 'social/leaderboard.html', {'top_users' : top_users})
+
+class Explore(View):
+    def get(self, request,  *args, **kwargs):
+        profile_list = UserProfile.objects.all()
+
+        context = {
+            'profile_list' : profile_list
+        }
+
+        return render(request, 'social/explore.html', context)
+
+class Followers(View):
+    def get(self, request, pk,  *args, **kwargs):
+        profile = UserProfile.objects.get(pk=pk)
+        followers = profile.followers.all()
+
+        context = {
+            'followers' : followers
+        }
+
+        return render(request, 'social/followers.html', context)

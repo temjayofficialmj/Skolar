@@ -14,6 +14,8 @@ from .views import (
 	AddDislike,
 	Search,
 	PostCreate,
+	Explore,
+	Followers,
 	)
 
 urlpatterns = [
@@ -28,8 +30,10 @@ urlpatterns = [
 	path('profile/edit/<int:pk>/', ProfileEdit.as_view(), name = 'profile-edit'),
 	path('profile/<int:profile_pk>/post/delete/<int:pk>/', PostDelete.as_view(), name = 'postdelete'),
 	path('profile/<int:profile_pk>/post/edit/<int:pk>/', PostUpdate.as_view(), name = 'postupdate'),
+	path('profile/<int:pk>/followers/', Followers.as_view(), name = 'followers_list'),
 	path('profile/<int:pk>/followers/add', AddFollower.as_view(), name = 'add-follower'),
 	path('profile/<int:pk>/followers/remove', RemoveFollower.as_view(), name = 'remove-follower'),
 	path('search/', Search.as_view(), name = 'profile-search'),
+	path('explore/', Explore.as_view(), name = 'explore'),
 	path('leaderboard/', views.leaderboard_view, name = 'lead')
 	] 
