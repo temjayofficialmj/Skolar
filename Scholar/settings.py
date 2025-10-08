@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+import sys
 import dj_database_url
 
 
@@ -87,13 +88,21 @@ WSGI_APPLICATION = 'Scholar.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    "default": dj_database_url.config(
-        default=f"postgres://{os.environ.get('DB_USER')}:{os.environ.get('DB_PASSWORD')}@{os.environ.get('DB_HOST')}:{os.environ.get('DB_PORT')}/{os.environ.get('DB_NAME')}",
-        conn_max_age=600,
-        ssl_require=False
-    )
-}
+if 'collectstatic' in sys.argv or os.environ.get('USE_SQLITE', 'False') == 'True':
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
+else:
+    DATABASES = {
+        "default": dj_database_url.config(
+            default=f"postgres://{os.environ.get('DB_USER')}:{os.environ.get('DB_PASSWORD')}@{os.environ.get('DB_HOST')}:{os.environ.get('DB_PORT')}/{os.environ.get('DB_NAME')}",
+            conn_max_age=600,
+            ssl_require=False
+        )
+    }
 
 if not DATABASES["default"].get("ENGINE"):
     DATABASES["default"] = {
@@ -151,7 +160,7 @@ if USE_CLOUDINARY:
         'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
     }
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-    MEDIA_URL = 'https://res.cloudinary.com/' + os.environ.get('CLOUDINARY_CLOUD_NAME') + '/media/'
+    MEDIA_URL = 'https://res.cloudinary.com/' + os.environ.get('CLOUDINARY_CLOUD_NAME') + '/'
 else:
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
