@@ -181,3 +181,9 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 ACCOUNT_EMAIL_REQUIRED =True
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+if USE_CLOUDINARY:
+    print("✅ Cloudinary storage active.")
+else:
+    print("⚠️ Using local file storage. Files will not persist on Render.")
+
+
