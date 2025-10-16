@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 import sys
 import dj_database_url
+from supabase import create_client, Client
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -206,9 +207,9 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 ACCOUNT_EMAIL_REQUIRED =True
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-if USE_CLOUDINARY:
-    print("✅ Cloudinary storage active.")
-else:
-    print("⚠️ Using local file storage. Files will not persist on Render.")
+# if USE_CLOUDINARY:
+#     print("✅ Cloudinary storage active.")
+# else:
+#     print("⚠️ Using local file storage. Files will not persist on Render.")
 
 
