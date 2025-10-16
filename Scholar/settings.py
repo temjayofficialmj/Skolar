@@ -88,7 +88,9 @@ WSGI_APPLICATION = 'Scholar.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-if 'collectstatic' in sys.argv or os.environ.get('USE_SQLITE', 'False') == 'True':
+USE_SUPABASE = os.environ.get("USE_SUPABASE", "False") == "True"
+
+if 'collectstatic' in sys.argv or not USE_SUPABASE:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
@@ -96,20 +98,21 @@ if 'collectstatic' in sys.argv or os.environ.get('USE_SQLITE', 'False') == 'True
         }
     }
 else:
+    # Supabase Postgres configuration
     DATABASES = {
         "default": dj_database_url.config(
             default=f"postgres://{os.environ.get('DB_USER')}:{os.environ.get('DB_PASSWORD')}@{os.environ.get('DB_HOST')}:{os.environ.get('DB_PORT')}/{os.environ.get('DB_NAME')}",
             conn_max_age=600,
-            ssl_require=False
+            ssl_require=True
         )
     }
 
+# Fallback if no valid engine is found
 if not DATABASES["default"].get("ENGINE"):
     DATABASES["default"] = {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
     }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -151,21 +154,43 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # MEDIA SETTINGS — Local for development, Cloudinary for production
-USE_CLOUDINARY = os.environ.get("USE_CLOUDINARY", "False") == "True"
 
-if USE_CLOUDINARY:
-    CLOUDINARY_STORAGE = {
-        "CLOUD_NAME": os.environ.get("CLOUDINARY_CLOUD_NAME"),
-        "API_KEY": os.environ.get("CLOUDINARY_API_KEY"),
-        "API_SECRET": os.environ.get("CLOUDINARY_API_SECRET"),
-    }
+# USE_CLOUDINARY = os.environ.get("USE_CLOUDINARY", "False") == "True"
 
-    DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
-    MEDIA_URL = f"https://res.cloudinary.com/{os.environ.get('CLOUDINARY_CLOUD_NAME')}/"
+# if USE_CLOUDINARY:
+#     CLOUDINARY_STORAGE = {
+#         "CLOUD_NAME": os.environ.get("CLOUDINARY_CLOUD_NAME"),
+#         "API_KEY": os.environ.get("CLOUDINARY_API_KEY"),
+#         "API_SECRET": os.environ.get("CLOUDINARY_API_SECRET"),
+#     }
+
+#     DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+#     MEDIA_URL = f"https://res.cloudinary.com/{os.environ.get('CLOUDINARY_CLOUD_NAME')}/"
+# else:
+#     MEDIA_URL = "/media/"
+#     MEDIA_ROOT = BASE_DIR / "media"
+#     DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+
+USE_SUPABASE_STORAGE = os.environ.get("USE_SUPABASE_STORAGE", "False") == "True"
+
+if USE_SUPABASE_STORAGE:
+    from supabase import create_client
+
+    SUPABASE_URL = os.environ.get("SUPABASE_URL")
+    SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
+    SUPABASE_BUCKET = os.environ.get("SUPABASE_BUCKET", "media")
+
+    # Public media URLs
+    MEDIA_URL = f"{SUPABASE_URL}/storage/v1/object/public/{SUPABASE_BUCKET}/"
+    DEFAULT_FILE_STORAGE = "users.storage_backends.SupabaseStorage"
+
+    print("✅ Using Supabase Storage for media files.")
 else:
     MEDIA_URL = "/media/"
     MEDIA_ROOT = BASE_DIR / "media"
     DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+    print("⚠️ Using local media storage (development mode).")
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
