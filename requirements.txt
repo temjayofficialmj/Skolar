@@ -26,6 +26,8 @@ MarkupSafe==2.1.5
 packaging==25.0
 pillow==10.4.0
 postgrest==0.16.11
+psycopg2
+psycopg2-binary
 pydantic==2.10.6
 pydantic_core==2.27.2
 python-dateutil==2.9.0.post0
