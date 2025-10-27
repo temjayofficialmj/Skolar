@@ -13,11 +13,14 @@ SUPABASE_BUCKET = os.environ.get("SUPABASE_BUCKET", "media")
 # Initialize Supabase client
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
+
 class SupabaseStorage(Storage):
-    """Custom Django storage backend for Supabase Storage"""
+    """
+    Custom Django storage backend using Supabase Storage.
+    """
 
     def _open(self, name, mode='rb'):
-        """Download a file from Supabase"""
+        """Download a file from Supabase and return as Django File object"""
         res = supabase.storage.from_(SUPABASE_BUCKET).download(name)
         if res is None:
             raise FileNotFoundError(f"{name} not found in Supabase bucket")
@@ -27,8 +30,10 @@ class SupabaseStorage(Storage):
         """Upload a file to Supabase"""
         data = content.read()
         if isinstance(data, str):
-            data = data.encode('utf-8')
-        res = supabase.storage.from_(SUPABASE_BUCKET).upload(name, data, {"upsert": True})
+            data = data.encode('utf-8')  # ensure bytes
+
+        # Pass upsert=True as a keyword argument
+        res = supabase.storage.from_(SUPABASE_BUCKET).upload(name, data, upsert=True)
         if res.get("error"):
             raise Exception(f"Supabase upload failed: {res['error']['message']}")
         return name
@@ -56,7 +61,7 @@ class SupabaseStorage(Storage):
         return len(res)
 
     def listdir(self, path):
-        """List files and directories"""
+        """List files and directories in a bucket path"""
         files = supabase.storage.from_(SUPABASE_BUCKET).list(path=path)
         directories, filenames = [], []
         for f in files:
