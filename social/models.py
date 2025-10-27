@@ -47,13 +47,24 @@ class WeeklyScore(models.Model):
 		unique_together = ('user', 'week_start')
 	
 
-@receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def create_user_profile(sender, instance, created, **kwargs):
-	if created:
-		UserProfile.objects.create(user=instance)
+# @receiver(post_save, sender=settings.AUTH_USER_MODEL)
+# def create_user_profile(sender, instance, created, **kwargs):
+# 	if created:
+# 		UserProfile.objects.create(user=instance)
+
+# @receiver(post_save, sender=settings.AUTH_USER_MODEL)
+# def save_user_profile(sender, instance, **kwargs):
+# 	instance.profile.save()
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def save_user_profile(sender, instance, **kwargs):
-	instance.profile.save()
+def manage_user_profile(sender, instance, created, **kwargs):
+    if created:
+        # Create profile if user is new
+        UserProfile.objects.create(user=instance)
+    else:
+        # Save profile only if it exists
+        if hasattr(instance, 'profile'):
+            instance.profile.save()
+
 
 
