@@ -13,11 +13,11 @@ class PostForm(forms.ModelForm):
 	 	)
 	
 	image = forms.ImageField(required=False)
-	video = forms.FileField(required=False)
+	# video = forms.FileField(required=False)
 
 	class Meta:
 		model = Post
-		fields = ['body', 'image', 'video']
+		fields = ['body', 'image']
 
 class CommentForm(forms.ModelForm):
 	comment = forms.CharField(
