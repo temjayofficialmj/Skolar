@@ -89,9 +89,6 @@ WSGI_APPLICATION = 'Scholar.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-USE_SUPABASE = os.environ.get("USE_SUPABASE", "False") == "True"
-
-# --- Base fallback for collectstatic and local development ---
 if 'collectstatic' in sys.argv:
     DATABASES = {
         "default": {
@@ -99,51 +96,26 @@ if 'collectstatic' in sys.argv:
             "NAME": BASE_DIR / "db.sqlite3",
         }
     }
-
 else:
-    # --- Supabase PostgreSQL database (default) ---
-    supabase_db_url = (
-        os.environ.get("SUPABASE_DB_URL")
-        or f"postgresql://{os.environ.get('DB_USER')}:{os.environ.get('DB_PASSWORD')}@"
-           f"{os.environ.get('DB_HOST')}:{os.environ.get('DB_PORT')}/{os.environ.get('DB_NAME')}"
-    )
-
-    # --- Optional Render PostgreSQL database (secondary) ---
+    # Use Render Postgres as default DB in production
     render_db_url = os.environ.get("DATABASE_URL")
 
-    if not supabase_db_url and not render_db_url:
-        # Fallback to SQLite if nothing is provided
+    if render_db_url:
+        DATABASES = {
+            "default": dj_database_url.config(
+                default=render_db_url,
+                conn_max_age=600,
+                ssl_require=True
+            )
+        }
+    else:
+        # Fallback to SQLite for local development
         DATABASES = {
             "default": {
                 "ENGINE": "django.db.backends.sqlite3",
                 "NAME": BASE_DIR / "db.sqlite3",
             }
         }
-
-    else:
-        DATABASES = {
-            # Supabase as the main default DB
-            "default": dj_database_url.config(
-                default=supabase_db_url,
-                conn_max_age=600,
-                ssl_require=True
-            )
-        }
-
-        # Add Render as secondary if available
-        if render_db_url:
-            DATABASES["render"] = dj_database_url.config(
-                default=render_db_url,
-                conn_max_age=600,
-                ssl_require=True
-            )
-
-# --- Safety fallback if engine is missing ---
-if not DATABASES["default"].get("ENGINE"):
-    DATABASES["default"] = {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
 
 
 
