@@ -13,7 +13,7 @@
 					{% csrf_token %}
 					{{ form|crispy }}
 					<div class="d-grid gap-2">
-						<button type="submit" class="btn btn-success">LogIn</button>
+						<button type="submit" class="btn btn-outline-danger">LogIn</button>
 					</div>
 					<span> Don't have an account? <a class="btn-dark" href="{% url 'signup' %}">SignUp</a></span>	 
 				</form>

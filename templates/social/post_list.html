@@ -17,19 +17,19 @@
     </div>
 
 		<!-- POSTS -->
-	<div class="main-content mb-3">
+	<div class="main-content ">
 		<div class="container mb-5 mt-2">
 			<div class="row justify-content-between">
 				<div class="col-md-9">
 					{% for post in post_list %}
 					<div class="row justify-content-center">
-						<div class="col-md-8 card bg-black col-sm-12 border-bottom border-dark">
+						<div class="col-md-8 card bg-black col-sm-12 border-top border-dark	">
 							<div class="card-header text-secondary">
 								<a href="{% url 'profileview' post.author.profile.pk %}">
 									<img class="rounded-circle border border-dark post-img" height="30" width="30" src="{{ post.author.profile.picture.url }}" />
 								</a>
 								<p class="post-text">
-									<a class="post-link text-primary" href="{% url 'profileview' post.author.profile.pk %}">@{{ post.author }} </a><small>{{ post.created_on }}</small>
+									<a class="post-link text-danger" href="{% url 'profileview' post.author.profile.pk %}">@{{ post.author }} </a><small>{{ post.created_on }}</small>
 								</p>
 							</div>
 							{% if post.video %}
@@ -84,7 +84,7 @@
 													<img class="rounded-circle border border-blue post-img" height="30" width="30" src="{{ item.user.profile.picture.url }}" alt="Profile pic" />
 												</a>
 												<p class="post-text">
-													<a class="post-link text-primary" href="{% url 'profileview' item.user.profile.pk %}"><strong>{{ item.user.username }}</strong></a> - <span class="badge bg-primary rounded-pill"> {{ item.score }}pts</span>
+													<a class="post-link text-danger" href="{% url 'profileview' item.user.profile.pk %}"><strong>{{ item.user.username }}</strong></a> - <span class="badge bg-danger rounded-pill"> {{ item.score }}pts</span>
 												</p>
 											</div>
 										</div>

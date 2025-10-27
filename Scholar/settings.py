@@ -14,7 +14,7 @@ from pathlib import Path
 import os
 import sys
 import dj_database_url
-from supabase import create_client, Client
+from supabase import Client, create_client 
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -181,6 +181,7 @@ if USE_SUPABASE_STORAGE:
     SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
     SUPABASE_BUCKET = os.environ.get("SUPABASE_BUCKET", "media")
 
+    supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
     # Public media URLs
     MEDIA_URL = f"{SUPABASE_URL}/storage/v1/object/public/{SUPABASE_BUCKET}/"
     DEFAULT_FILE_STORAGE = "users.storage_backends.SupabaseStorage"

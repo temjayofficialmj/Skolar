@@ -4,8 +4,8 @@
 
 {% block content %}
 	{% include 'navbar.html' %}
-	<div class="main-content mb-5">
-		<div class="container mb-5">
+	<div class="main-content">
+		<div class="container-fluid mb-5">
 			<div class="row bg-black">
 				<div class="col-md-3 col-sm-6">
 					<a href="{% url 'postlist' %}" class="btn btn-dark shadow-lg"><i class="fa fa-circle-left"></i></a>
@@ -15,7 +15,7 @@
 			<!-- MOBILE VIEW -->
 
 			<div class="bg-black d-block d-md-none">
-				<div class="row justify-content-between">
+				<div class="row bg-black justify-content-between">
 					<div class="col-4">
 						<img src="{{ profile.picture.url }}" class="rounded-circle border border-dark" height="125" width="125" />
 					</div>
@@ -57,8 +57,7 @@
 								{% endif %}
 
 								<p>
-									<strong><a class="post-link text-white" href="{% url 'followers_list' profile.pk %}">Followers: </a></strong>
-									{{ number_of_followers }}
+									<strong>{{ number_of_followers }}</strong><a class="post-link text-white" href="{% url 'followers_list' profile.pk %}"> Followers</a>
 								</p>
 							</div>
 							{% if request.user == user %}
@@ -87,14 +86,14 @@
 					</div>
 				</div>
 				
-				<div class="row justify-content-start">
+				<div class="row bg-black justify-content-start">
 					
 					{% if user == request.user %}
 
 					<div class="col-12">
 						{% if profile.bio %}
 						<strong>Bio:</strong>
-						<div class="border-top border-start border-end border-dark rounded">
+						<div class="border-top border-start border-end border-danger rounded">
 							<p class="p-2"> {{ profile.bio }}</p>
 						</div>
 						{% else %}
@@ -138,11 +137,13 @@
 				<div class="card bg-black shadow-sm col-md-12 col-sm-12 px-5 pt-3 text-white">
 					<div class="row">
 						<div class="col-md-2 col-sm-3">
-							<img src="{{ profile.picture.url }}" class="rounded-circle border border-dark" height="100" width="100" />
+							
 							<div class=" text-white">
 								<p>
 									{% if user == request.user %}
+									<img src="{{ profile.picture.url }}" class="rounded-circle border border-dark" height="130" width="130" />
 									{% else %}
+									<img src="{{ profile.picture.url }}" class="rounded-circle border border-dark" height="100" width="100" />
 									{% if is_following %}
 									<form method="POST" action="{% url 'remove-follower' profile.pk %}">
 										{% csrf_token %}
@@ -159,7 +160,7 @@
 							</div>
 						</div>
 
-						<div class="col-md-7 col-sm-4 ms-5 ">
+						<div class="col-md-7 col-sm-4  ">
 							{% if profile.name %}
 							<h3 class="pt-4">{{ profile.name }}
 								<span>
@@ -183,8 +184,7 @@
 
 							<div class=" text-white">
 								<p>
-									<strong><a class="post-link text-white" href="{% url 'followers_list' profile.pk %}">Followers: </a></strong>
-									{{ number_of_followers }}
+									<strong>{{ number_of_followers }}</strong><a class="post-link text-white" href="{% url 'followers_list' profile.pk %}"> Followers</a>
 								</p>
 							</div>
 						</div>
@@ -221,7 +221,7 @@
 						<div class="col-md-6">
 							{% if profile.bio %}
 							<strong>Bio:</strong>
-							<div  class="border border-dark rounded">
+							<div  class="border-top border-start border-danger rounded">
 								<p class="p-2"> {{ profile.bio }}</p>
 							</div>
 							{% endif %}
@@ -232,7 +232,7 @@
 
 				<!-- POSTS -->
 
-			<div class="row bg-black rounded justify-content-center mt-1 mb-1 text-white">
+			<div class="row bg-black rounded justify-content-center mt-1 border-top border-bottom border-danger mb-1 text-white">
 				<div class="col-1">
 					POSTS
 				</div>
@@ -245,7 +245,7 @@
 							<img class="rounded-circle post-img" height="30" width="30" src="{{ post.author.profile.picture.url }}" />
 						</a>
 						<p class="post-text">
-							<a class="post-link text-primary" href="{% url 'profileview' post.author.profile.pk %}">@{{ post.author }} </a><small>{{ post.created_on }}</small>
+							<a class="post-link text-danger" href="{% url 'profileview' post.author.profile.pk %}">@{{ post.author }} </a><small>{{ post.created_on }}</small>
 						</p> 
 					</div>
 					{% if post.video %}

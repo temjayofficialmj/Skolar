@@ -7,45 +7,56 @@
 {% block content %}
 {% include 'navbar.html' %}
 <div class="main-content ">
-	<div class="container">
-		<div class="row mt-5">
-			<div class="col-md-5 col-sm-6">
-				<a class="btn btn-dark " href="{% url 'postlist' %}"><i class="fa fa-circle-left"></i></a>
+	<div class="container mb-5">
+		<div class="row">
+			<div class="col-md-3 col-sm-2">
+				<a class="btn btn-dark bg-btwn" href="{% url 'postlist' %}"><i class="fa fa-circle-left"></i></a>
 			</div>
-		</div>
-		{% for profile in profile_list %}
-		<div class="row justify-content-center mt-3">
-			<div class="col-md-5 col-sm-12 border-bottom border-black position-relative">
-				<div>
-					<a href="{% url 'profileview' profile.pk %}">
-						<img class="rounded-circle border border-dark post-img" height="30" width="30" src="{{ profile.picture.url }}" />
+			<div class="col-md-9 col-sm-4 position-relative mt-3">
+				<p>
+					<div class="row">
+						<div class="col-8">
+							<input type="text" class="form-control me-2 " placeholder="seek" aria-label="Search" name="query" value="{{ request.GET.query }}">
+						</div>
+						<div class="col-3 pt-1">
+							<i class="fa fa-search"></i>
+						</div>
+					</div>
+					<a href="#sidebar" class="nav-link d-block post-link stretched-link" data-bs-toggle="offcanvas" role="button" aria-controls="sidebar">
 					</a>
-					<p class="post-text">
-						<a class="post-link text-primary" href="{% url 'profileview' profile.pk %}">@{{ profile.user }} </a>
-					</p>
-				</div>
-				{% if profile.school %}
-				<p class="text-secondary">{{ profile.school }}</p>
-				{% endif %}
-				<p><strong>Followers: </strong>{{ profile.followers.count }}
-					{% if user == request.user %}
-					{% else %}
-					{% if is_following %}
-					<form method="POST" action="{% url 'remove-follower' profile.pk %}">
-						{% csrf_token %}
-						<button class="btn btn-outline-danger" type="submit">Unfollow</button>
-					</form>
-					{% else %}
-					<form method="POST" action="{% url 'add-follower' profile.pk %}">
-						{% csrf_token %}
-						<button class="btn btn-outline-success" type="submit">Follow</button>
-					</form>
-					{% endif %}
-					{% endif %}
 				</p>
 			</div>
 		</div>
-		{% endfor %}
+		<div class="row justify-content-center border-bottom border-danger">
+			<div class="col-6 pt-2">
+				<p class="text-secondary"><i class="fa fa-search-plus"></i> Explore Users</p>
+			</div>
+		</div>
+			{% for profile in profile_list %}
+			<div class="row justify-content-center mt-3">
+				<div class="col-md-5 col-sm-12 border-bottom border-black position-relative">
+					<div class="	row">
+						<div class="col-3">
+							<a href="{% url 'profileview' profile.pk %}">
+								<img class="rounded-circle border border-dark post-img" height="70" width="70" src="{{ profile.picture.url }}" />
+							</a>
+						</div>
+						<div class="col-8 py-1">
+							<span class="post-text">
+								<a class="post-link text-danger" href="{% url 'profileview' profile.pk %}">@{{ profile.user }} </a>
+							</span><br>
+							{% if profile.school %}
+							<span class="text-secondary">{{ profile.school }}</span><br>
+							{% else %}
+							<span ></span><br>
+							{% endif %}
+							<strong>{{ profile.followers.count }}</strong> Followers
+						</div>					
+					</div>
+					<a class="stretched-link" href="{% url 'profileview' profile.pk %}"></a>				
+				</div>
+			</div>
+			{% endfor %}
 	</div>
 </div>
 {% endblock %}

@@ -6,8 +6,8 @@
 
 {% block content %}
 	{% include 'navbar.html' %}
-<div class="main-content mb-5">
-	<div class="container mb-3">
+<div class="main-content ">
+	<div class="container">
 		<div class="row mt-5">
 			<div class="col-md-5 col-sm-6">
 				<a class="btn btn-dark shadow-md" href="{% url 'postlist' %}"><i class="fa fa-circle-left"></i></a>
@@ -22,7 +22,7 @@
 							<img class="rounded-circle border border-dark post-img" height="30" width="30" src="{{ post.author.profile.picture.url }}" />
 						</a>
 						<p class="post-text">
-							<a class="post-link text-primary" href="{% url 'profileview' post.author.profile.pk %}">@{{ post.author }} </a><small>{{ post.created_on }}</small>
+							<a class="post-link text-danger" href="{% url 'profileview' post.author.profile.pk %}">@{{ post.author }} </a><small>{{ post.created_on }}</small>
 							{% if request.user == post.author %}
 							<a href="{% url 'postupdate' post.author.profile.pk post.pk %}" class="btn btn-dark"><i class="fa fa-edit"></i></a>
 							<a href="{% url 'postdelete' post.author.profile.pk post.pk %}" class="btn text-danger  btn-dark"><i class="fa fa-trash"></i></a>
@@ -40,7 +40,7 @@
 						</video>
 					{% endif %}
 					<p>
-						<a class="post-link text-primary" href="{% url 'profileview' post.author.profile.pk %}"><small class="text-secondary">@{{ post.author }}_:</small>
+						<a class="post-link text-danger" href="{% url 'profileview' post.author.profile.pk %}"><small class="text-secondary">@{{ post.author }}_:</small>
 						</a>
 						{{ post.body }}
 					</p>
@@ -69,7 +69,7 @@
 					{% csrf_token %}
 					{{ form | crispy }}
 					<div class="d-grid gap-2 mb-5">
-						<button class="btn btn-success">Submit!</button>
+						<button class="btn btn-outline-danger">Submit!</button>
 					</div>
 				</form>
 			</div>
@@ -92,7 +92,7 @@
 						<img class="rounded-circle post-img" height="30" width="30" src="{{ comment.author.profile.picture.url }}" />
 						</a>
 						<p class="post-text">
-							<a class="post-link text-primary" href="{% url 'profileview' comment.author.profile.pk %}">@{{ comment.author }} </a><small>{{ comment.created_on }}</small>
+							<a class="post-link text-danger" href="{% url 'profileview' comment.author.profile.pk %}">@{{ comment.author }} </a><small>{{ comment.created_on }}</small>
 							{% if request.user == comment.author %}
 							<a href="{% url 'commentdelete' post.pk comment.pk %}" class="btn btn-dark"><i class="fa fa-trash"></i></a>
 							{% endif %}
