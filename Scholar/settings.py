@@ -174,24 +174,27 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 USE_SUPABASE_STORAGE = os.environ.get("USE_SUPABASE_STORAGE", "False") == "True"
 
-if USE_SUPABASE_STORAGE:
+SUPABASE_URL = os.environ.get("SUPABASE_URL")
+SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
+SUPABASE_BUCKET = os.environ.get("SUPABASE_BUCKET", "media")
+
+if USE_SUPABASE_STORAGE and SUPABASE_URL and SUPABASE_KEY:
     from supabase import create_client
-
-    SUPABASE_URL = os.environ.get("SUPABASE_URL")
-    SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
-    SUPABASE_BUCKET = os.environ.get("SUPABASE_BUCKET", "media")
-
     supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
-    # Public media URLs
+
     MEDIA_URL = f"{SUPABASE_URL}/storage/v1/object/public/{SUPABASE_BUCKET}/"
     DEFAULT_FILE_STORAGE = "users.storage_backends.SupabaseStorage"
-
     print("✅ Using Supabase Storage for media files.")
 else:
     MEDIA_URL = "/media/"
     MEDIA_ROOT = BASE_DIR / "media"
     DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
-    print("⚠️ Using local media storage (development mode).")
+
+    if USE_SUPABASE_STORAGE:
+        print("⚠️ Supabase storage enabled, but missing credentials (URL or KEY). Using local storage instead.")
+    else:
+        print("⚠️ Using local media storage (development mode).")
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
