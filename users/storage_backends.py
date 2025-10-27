@@ -32,12 +32,12 @@ class SupabaseStorage(Storage):
         if isinstance(data, str):
             data = data.encode('utf-8')  # ensure bytes
 
-        # Remove `upsert=True`, just upload bytes
         res = supabase.storage.from_(SUPABASE_BUCKET).upload(name, data)
-        
-        # Check for errors
-        if res.get("error"):
-            raise Exception(f"Supabase upload failed: {res['error']['message']}")
+
+        # For the new Supabase client:
+        if hasattr(res, 'error') and res.error:
+            raise Exception(f"Supabase upload failed: {res.error.message}")
+
         return name
 
     def exists(self, name):
