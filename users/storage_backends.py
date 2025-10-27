@@ -27,16 +27,19 @@ class SupabaseStorage(Storage):
         return File(BytesIO(res), name=name)
 
     def _save(self, name, content):
-        """Upload a file to Supabase"""
-        data = content.read()
-        if isinstance(data, str):
-            data = data.encode('utf-8')  # ensure bytes
+    """Upload a file to Supabase"""
+    data = content.read()
+    if isinstance(data, str):
+        data = data.encode('utf-8')  # ensure bytes
 
-        # Pass upsert=True as a keyword argument
-        res = supabase.storage.from_(SUPABASE_BUCKET).upload(name, data, upsert=True)
-        if res.get("error"):
-            raise Exception(f"Supabase upload failed: {res['error']['message']}")
-        return name
+    # Remove `upsert=True`, just upload bytes
+    res = supabase.storage.from_(SUPABASE_BUCKET).upload(name, data)
+    
+    # Check for errors
+    if res.get("error"):
+        raise Exception(f"Supabase upload failed: {res['error']['message']}")
+    return name
+
 
     def exists(self, name):
         """Check if a file exists in Supabase"""
