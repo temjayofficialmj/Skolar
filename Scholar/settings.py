@@ -91,29 +91,59 @@ WSGI_APPLICATION = 'Scholar.wsgi.application'
 
 USE_SUPABASE = os.environ.get("USE_SUPABASE", "False") == "True"
 
-if 'collectstatic' in sys.argv or not USE_SUPABASE:
+# --- Base fallback for collectstatic and local development ---
+if 'collectstatic' in sys.argv:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
             "NAME": BASE_DIR / "db.sqlite3",
         }
     }
-else:
-    # Supabase Postgres configuration
-    DATABASES = {
-        "default": dj_database_url.config(
-            default=f"postgres://{os.environ.get('DB_USER')}:{os.environ.get('DB_PASSWORD')}@{os.environ.get('DB_HOST')}:{os.environ.get('DB_PORT')}/{os.environ.get('DB_NAME')}",
-            conn_max_age=600,
-            ssl_require=True
-        )
-    }
 
-# Fallback if no valid engine is found
+else:
+    # --- Render main PostgreSQL database (default) ---
+    default_db_url = os.environ.get("DATABASE_URL")
+
+    # --- Optional Supabase PostgreSQL database (secondary) ---
+    supabase_db_url = (
+        os.environ.get("SUPABASE_DB_URL")
+        or f"postgresql://{os.environ.get('DB_USER')}:{os.environ.get('DB_PASSWORD')}@"
+           f"{os.environ.get('DB_HOST')}:{os.environ.get('DB_PORT')}/{os.environ.get('DB_NAME')}"
+    )
+
+    if not default_db_url and not supabase_db_url:
+        # Fallback to SQLite if nothing is provided
+        DATABASES = {
+            "default": {
+                "ENGINE": "django.db.backends.sqlite3",
+                "NAME": BASE_DIR / "db.sqlite3",
+            }
+        }
+    else:
+        DATABASES = {
+            # Render DB (main)
+            "default": dj_database_url.config(
+                default=default_db_url,
+                conn_max_age=600,
+                ssl_require=True
+            )
+        }
+
+        # Only add Supabase if USE_SUPABASE=True
+        if USE_SUPABASE:
+            DATABASES["supabase"] = dj_database_url.config(
+                default=supabase_db_url,
+                conn_max_age=600,
+                ssl_require=True
+            )
+
+# --- Safety fallback if engine is missing ---
 if not DATABASES["default"].get("ENGINE"):
     DATABASES["default"] = {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
     }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
